@@ -5,19 +5,27 @@ if [ $UID -ne 0 ]; then
     exit 1;
 fi
 
+BLACK='\e[0;30m'
+RED='\e[0;31m'
+GREEN='\e[0;32m'
+YELLOW='\e[0;33m'
+BLUE='\e[0;34m'
+MAGENTA='\e[0;35m'
+CYAN='\e[0;36m'
+WHITE='\e[0;37m'
+END_COLOR='\e[0m'
+
 # BASIC SETUP TOOLS
 msg() {
-    printf '%b\n' "$1" >&2
+    printf $MAGENTA'%b\n'$END_COLOR "$1" >&2
 }
 
 success() {
-    if [ "$ret" -eq '0' ]; then
-    msg "\e[32m[✔]\e[0m ${1}${2}"
-    fi
+    echo -e "$GREEN[✔]$END_COLOR ${1}${2}"
 }
 
 error() {
-    msg "\e[31m[✘]\e[0m ${1}${2}"
+    msg "$RED[✘]$END_COLOR ${1}${2}"
     exit 1
 }
 
@@ -25,6 +33,15 @@ debug() {
     if [ "$debug_mode" -eq '1' ] && [ "$ret" -gt '1' ]; then
       msg "An error occured in function \"${FUNCNAME[$i+1]}\" on line ${BASH_LINENO[$i+1]}, we're sorry for that."
     fi
+}
+
+add_apt_repo() {
+    VAR=$(expect -c "
+        spawn add-apt-repository $1
+        expect \"Press \[ENTER\]\"
+        send \"\r\"
+    ")
+    echo "$VAR"
 }
 
 program_exists() {
@@ -37,44 +54,112 @@ program_exists() {
     fi
 }
 
+repo_change() {
+    # 기본 저장소를 다음으로 바꾸기. 빨라진다
+    sed -i 's/us.archive.ubuntu.com/ftp.daum.net/' /etc/apt/sources.list
+    sed -i 's/kr.archive.ubuntu.com/ftp.daum.net/' /etc/apt/sources.list
+}
 
-# 기본 저장소를 다음으로 바꾸기. 빨라진다
-sed -i 's/us.archive.ubuntu.com/ftp.daum.net/' /etc/apt/sources.list
-sed -i 's/kr.archive.ubuntu.com/ftp.daum.net/' /etc/apt/sources.list
+update() {
+    msg "Ubuntu update start."
+    apt-get update && apt-get upgrade
+    success "Update Complete"
+}
 
-apt-get update && apt-get upgrade
+openssh() {
+    msg "Openssh install start."
+    apt-get install -y openssh-server
+    success "Install openssh-server"
+}
 
-apt-get install -y openssh-server
+utillity() {
+    # Utillity install
+    msg "Utillities install start."
+    apt-get install -y cronolog vim ctags git subversion build-essential g++ curl libssl-dev apache2-utils sysv-rc-conf expect
+    success "Install Utillities"
+}
 
-# Utillity
-apt-get install -y cronolog vim ctags git subversion build-essential g++ curl libssl-dev apache2-utils sysv-rc-conf
+# MySQL install
+mysql() {
+    msg "MySQL install start."
+    apt-get install -y mysql-server mysql-client
+    success "Install Mysql"
+}
 
-# MySQL
-apt-get install -y mysql-server mysql-client
+# Redis install
+redis() {
+    msg "Redis install start."
+    apt-get install -y redis-server
+    success "Install Reids"
+}
 
-# Redis
-apt-get install -y redis-server
+# Node.js install
+nodejs() {
+    msg "Node.js install start."
+    apt-get install -y python-software-properties software-properties-common
 
-# Node.js
-apt-get install -y python-software-properties software-properties-common
-add-apt-repository ppa:chris-lea/node.js
-apt-get update
-apt-get install -y nodejs
-npm install express jade stylus socket.io -g
+    add_apt_repo "ppa:chris-lea/node.js"
+    apt-get update
+    apt-get install -y nodejs
+    npm install express jade stylus socket.io -g
+    success "Install Node.js"
+}
 
-# Java 7 Install
-add-apt-repository ppa:webupd8team/java
-apt-get update
-apt-get install -y oracle-java7-installer
+# Java 7 install
+java() {
+    msg "Java install start."
+    # Java 7 install
+    add_apt_repo "ppa:webupd8team/java"
+    apt-get update
+    apt-get install -y oracle-java7-installer
+    success "Install Java7"
+}
 
-# Nginx
-apt-get install python-software-properties
-add-apt-repository ppa:nginx/stable
-apt-get update && apt-get install nginx
+# Nginx install
+nginx() {
+    msg "Nginx install start."
+    apt-get install python-software-properties
+    add_apt_repo "ppa:nginx/stable"
+    apt-get update && apt-get install nginx
+    success "Install Nginx"
+}
 
-# PHP-FPM
-apt-get install -y python-software-properties
-add-apt-repository ppa:l-mierzwa/lucid-php5
-apt-get update
-apt-get install -y php5-fpm php5-mysql php5-curl php5-gd php-pear php5-imap php5-mcrypt php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl
+# PHP-FPM install
+phpfpm() {
+    msg "PHP-FPM install start."
+    apt-get install -y python-software-properties
+    add_apt_repo "ppa:l-mierzwa/lucid-php5"
+    apt-get update
+    apt-get install -y php5 php-apc php-pear php5-cli php5-common php5-curl php5-dev php5-fpm php5-gd php5-gmp php5-imap php5-ldap php5-mcrypt php5-memcache php5-memcached php5-mysql php5-odbc php5-pspell php5-recode php5-snmp php5-sqlite php5-sybase php5-tidy php5-xmlrpc php5-xsl libapache2-mod-php5
+    success "Install PHP-FPM"
+}
+
+if [ $# -eq 0 ]; then
+    msg "Select any packages.";
+    exit;
+fi
+
+if [ $1 == "all" ]; then
+    msg "Install all packages."
+    repo_change;
+    update;
+    openssh;
+    utillity;
+    mysql;
+    redis;
+    node.js;
+    java;
+    nginx;
+    phpfpm;
+    msg "Complete."
+    exit;
+fi
+
+exit;
+for (( i=1;$i<=$#;i=$i+1 ))
+do
+    if type ${!i} | grep -i function > /dev/null &2>1; then
+        eval ${!i};
+    fi
+done
 
