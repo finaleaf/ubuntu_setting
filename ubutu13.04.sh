@@ -155,7 +155,6 @@ if [ $1 == "all" ]; then
     exit;
 fi
 
-exit;
 for (( i=1;$i<=$#;i=$i+1 ))
 do
     if type ${!i} | grep -i function > /dev/null &2>1; then
