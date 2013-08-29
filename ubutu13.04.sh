@@ -130,7 +130,7 @@ phpfpm() {
     apt-get install -y python-software-properties
     add_apt_repo "ppa:l-mierzwa/lucid-php5"
     apt-get update
-    apt-get install -y php5 php-apc php-pear php5-cli php5-common php5-curl php5-dev php5-fpm php5-gd php5-gmp php5-imap php5-ldap php5-mcrypt php5-memcache php5-memcached php5-mysql php5-odbc php5-pspell php5-recode php5-snmp php5-sqlite php5-sybase php5-tidy php5-xmlrpc php5-xsl libapache2-mod-php5
+    apt-get install -y php5 php-apc php-pear php5-cli php5-common php5-curl php5-dev php5-fpm php5-gd php5-gmp php5-imap php5-ldap php5-mcrypt php5-memcache php5-memcached php5-mysql php5-odbc php5-pspell php5-recode php5-snmp php5-sqlite php5-sybase php5-tidy php5-xmlrpc php5-xsl libapache2-mod-php5 php5-mongo php5-xmlrpc
     success "Install PHP-FPM"
 }
 
