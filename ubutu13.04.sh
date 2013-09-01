@@ -134,6 +134,32 @@ phpfpm() {
     success "Install PHP-FPM"
 }
 
+unity() {
+    msg "Unity-tweek install"
+    apt-get install -y unity-tweak-tool
+    apt-get install -y gnome-tweak-tool
+	apt-get install -y compizconfig-settings-manager compiz-plugins-extra
+
+    msg "Remove online search lenses"
+	apt-get autoremove unity-lens-shopping
+	apt-get autoremove unity-lens-music
+	apt-get autoremove unity-lens-photos
+	apt-get autoremove unity-lens-gwibber
+	apt-get autoremove unity-lens-video
+
+    msg "Remove online search lenses"
+	sed -i "s/enabled=1/enabled=1/" /etc/default/apport
+	service apport stop
+
+	msg "Install adobe flash plugins."
+	apt-get install -y flashplugin-installer
+
+	msg "Install compression/decompression tools."
+	apt-get install -y p7zip-rar p7zip-full unace unrar zip unzip sharutils rar uudeview mpack arj cabextract file-roller
+
+    success "Unity setting complete."
+}
+
 if [ $# -eq 0 ]; then
     msg "Select any packages.";
     exit;
