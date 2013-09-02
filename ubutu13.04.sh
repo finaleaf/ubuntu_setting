@@ -75,7 +75,7 @@ openssh() {
 utillity() {
     # Utillity install
     msg "Utillities install start."
-    apt-get install -y cronolog vim ctags git subversion build-essential g++ curl libssl-dev apache2-utils sysv-rc-conf expect
+    apt-get install -y cronolog vim ctags git subversion build-essential g++ curl libssl-dev apache2-utils sysv-rc-conf expect tmux
     success "Install Utillities"
 }
 
