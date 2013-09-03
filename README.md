@@ -5,4 +5,5 @@ Auto personal setting shell scripts.
 
 Ubuntu 13.04 Package Install
 
+    apr-get install curl
     curl https://raw.github.com/gyuha/ubuntu_setting/master/ubutu13.04.sh | sudo bash -s all
