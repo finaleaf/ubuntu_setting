@@ -142,10 +142,14 @@ phpredis() {
 copyconf() {
     msg "Copy service conf"
 	msg "Nginx"
-	cp -f ./conf/nginx /etc/nginx/sites-available/default
+	curl https://raw.github.com/gyuha/ubuntu_setting/master/conf/nginx > /tmp/nginx.conf
+	cp -f /tmp/nginx.conf /etc/nginx/sites-available/default
+	rm -f /tmp/nginx.conf
 	service nginx restart
 	msg "php-fpm"
-	cp -f ./conf/php.dev.ini /etc/php5/fpm/php.ini
+	curl https://raw.github.com/gyuha/ubuntu_setting/master/conf/php.dev.ini > /tmp/php.dev.ini
+	cp -f /tmp/php.dev.ini /etc/php5/fpm/php.ini
+	rm -f /tmp/php.dev.ini
 	service php5-fpm restart
     success "Copy complete"
 }
