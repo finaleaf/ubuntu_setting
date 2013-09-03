@@ -40,6 +40,8 @@ add_apt_repo() {
         spawn add-apt-repository $1
         expect \"Press \[ENTER\]\"
         send \"\r\"
+        expect \"OK\"
+        send \"\r\"
     ")
     echo "$VAR"
 }
