@@ -134,6 +134,19 @@ phpfpm() {
     success "Install PHP-FPM"
 }
 
+phpredis() {
+    msg "phpredis install start"
+	pecl install redis
+    #git clone https://github.com/nicolasff/phpredis.git
+    #cd phpredis
+    #phpize
+    #./configure [--enable-redis-igbinary]
+    #make && make install
+    #cd -
+    #rm -rf phpredis
+    success "Install phpredis"
+}
+
 if [ $# -eq 0 ]; then
     msg "Select any packages.";
     exit;
@@ -161,4 +174,3 @@ do
         eval ${!i};
     fi
 done
-
