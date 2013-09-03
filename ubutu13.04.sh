@@ -53,7 +53,8 @@ repo_change() {
 
 update() {
     msg "Ubuntu update start."
-    apt-get update && apt-get upgrade
+    apt-get update
+	apt-get upgrade
     success "Update Complete"
 }
 
@@ -110,7 +111,8 @@ nginx() {
     msg "Nginx install start."
     apt-get install python-software-properties
     add-apt-repository -y "ppa:nginx/stable"
-    apt-get update && apt-get install nginx
+    apt-get update
+	apt-get install nginx
     success "Install Nginx"
 }
 
@@ -160,7 +162,7 @@ fi
 
 for (( i=1;$i<=$#;i=$i+1 ))
 do
-    if type ${!i} | grep -i function > /dev/null &2>1; then
+    if type ${!i} | grep -i function > /dev/null ; then
         eval ${!i};
     fi
 done
