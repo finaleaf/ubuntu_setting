@@ -139,6 +139,17 @@ phpredis() {
     success "Install phpredis"
 }
 
+copyconf() {
+    msg "Copy service conf"
+	msg "Nginx"
+	cp -f ./conf/nginx /etc/nginx/sites-available/default
+	service nginx restart
+	msg "php-fpm"
+	cp -f ./conf/php.dev.ini /etc/php5/fpm/php.ini
+	service php5-fpm restart
+    success "Copy complete"
+}
+
 if [ $# -eq 0 ]; then
     msg "Select any packages.";
     exit;
@@ -156,6 +167,7 @@ if [ $1 == "all" ]; then
     java;
     nginx;
     phpfpm;
+	phpredis;
     msg "Complete."
     exit;
 fi
