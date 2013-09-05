@@ -92,7 +92,7 @@ nodejs() {
     add-apt-repository -y  "ppa:chris-lea/node.js"
     apt-get update
     apt-get install -y nodejs
-    npm install express jade stylus socket.io -g
+    npm install express jade stylus socket.io locally -g
     success "Install Node.js"
 }
 
@@ -137,6 +137,12 @@ phpredis() {
     #cd -
     #rm -rf phpredis
     success "Install phpredis"
+}
+
+samba() {
+    msg "Samba install start"
+	apt-get install -y samba
+    success "Install samba"
 }
 
 copyconf() {
