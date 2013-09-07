@@ -173,7 +173,7 @@ if [ $1 == "all" ]; then
 	utillity;
 	mysql;
 	redis;
-	node.js;
+	nodejs;
 	java;
 	nginx;
 	phpfpm;
