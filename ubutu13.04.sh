@@ -72,10 +72,19 @@ utillity() {
 }
 
 # MySQL install
-mysql() {
-	msg "MySQL install start."
-	apt-get install -y mysql-server mysql-client
-	success "Install Mysql"
+#mysql() {
+#	msg "MySQL install start."
+#	apt-get install -y mysql-server mysql-client
+#	success "Install Mysql"
+#}
+
+mariadb() {
+	sudo apt-get install -y python-software-properties
+	sudo apt-key -y adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+	sudo add-apt-repository -y 'deb http://ftp.kaist.ac.kr/mariadb/repo/5.5/ubuntu precise main'
+
+	sudo apt-get -y update
+	sudo apt-get -y install mariadb-server
 }
 
 # Redis install
@@ -171,7 +180,8 @@ if [ $1 == "all" ]; then
 	update;
 	openssh;
 	utillity;
-	mysql;
+	#mysql;
+	mariadb;
 	redis;
 	nodejs;
 	java;
